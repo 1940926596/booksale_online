@@ -10,6 +10,7 @@ import VueAxios from "vue-axios";
 import Buefy from "buefy";
 import "buefy/dist/buefy.css";
 import store from './store/index.js'
+axios.defaults.withCredentials=true //允许cookie跨域
 Vue.config.productionTip = false
 Vue.use(ElementUI)
 Vue.use(Buefy)

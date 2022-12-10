@@ -6,8 +6,10 @@
         <div>交易平台</div>
       </div>
       <div class="form-wrapper">
-        <input class="input-item" name="username" placeholder="username" type="text">
-        <input class="input-item" name="password" placeholder="password" type="password">
+        <form>
+        <input class="input-item" v-model="username" name="username" placeholder="username" type="text">
+        <input class="input-item" v-model="userpwd" name="password" placeholder="password" type="password">
+        </form>
         <div class="btn" @click="login">Login</div>
       </div>
       <div class="msg">
@@ -16,39 +18,51 @@
       </div>
       <div class="msg">
         Forget account?
-        <el-button @click="register">Find password</el-button>
+        <el-button @click="findPwd">Find password</el-button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import {login} from "../api/getData";
+
 export default {
   name: "userLogin",
+  data(){
+    return{
+      username:'',
+      userpwd:''
+    }
+  },
   methods: {
     register: function () {
       this.$router.push('/register')
     },
     login: function () {
       const self = this
-      this.axios.get('http://43.143.211.83:8080/forum_oneUser_list_email?forum_user_email=' + this.email + '&forum_user_pwd=' + this.password).then(
+      this.axios.get(self.$store.state.host+'sqlOneNamePwdList?user_name=' + this.username + '&user_pwd=' + this.userpwd).then(
         (response) => {
+          self.$store.commit('setForum_user_id', response.data[0].id)
+          self.$store.commit('setForum_user_name', response.data[0].name)
+          self.$store.commit('setForum_user_pwd', response.data[0].pwd)
+          self.$store.commit('setForum_user_email', response.data[0].email)
+          self.$store.commit('setForum_user_position', response.data[0].position)
           console.log(this.$store.state.user)
           console.log(response)
           if (response.data.length) {
             alert("登录成功")
-            self.$store.commit('setForum_user_id', response.data[0].forum_id)
-            self.$store.commit('setForum_user_name', response.data[0].forum_name)
-            self.$store.commit('setForum_user_pwd', response.data[0].forum_pwd)
-            self.$store.commit('setForum_user_email', response.data[0].forum_email)
-            self.$router.push('/userPage')
+            self.$router.push('/bookMall')
             console.log(this.$store.state.user)
-            login(this.$store.state.user.forum_user_email, this.$store.state.user.forum_user_pwd)
+            login(this.$store.state.user.user_name, this.$store.state.user.user_pwd)
             location.reload()
           } else
             alert("查无此人")
         }
       )
+    },
+    findPwd:function (){
+      this.$router.push('/findPwd')
     }
   }
 }

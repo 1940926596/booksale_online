@@ -1,6 +1,6 @@
 <template>
   <nav aria-label="main navigation" class="navbar is-light" role="navigation">
-    <div class="navbar-brand">
+    <div class="navbar-brand" style="margin-left: 20px">
       <a>
         <img class="img" src="../../assets/logo.png"/>
       </a>
@@ -17,26 +17,26 @@
       </a>
     </div>
 
-    <div id="navbarBasicExample" class="navbar-menu">
+    <div id="navbarBasicExample" class="navbar-menu" style="margin-left: 30px">
       <div class="navbar-start">
-        <a class="navbar-item" @click="register">首页</a>
+        <a class="navbar-item" @click="register">二手书商城</a>
 
-        <a class="navbar-item">商城</a>
-        <a class="navbar-item">购买记录</a>
-        <a class="navbar-item">发布记录</a>
-        <a class="navbar-item">消息列表</a>
+        <!--        <a class="navbar-item">商城</a>-->
+        <a class="navbar-item" @click="buyList">购买记录</a>
+        <a class="navbar-item" @click="saleList">发布记录</a>
+        <a class="navbar-item" @click="messageList">消息列表</a>
 
-        <div class="navbar-item has-dropdown is-hoverable">
-          <a class="navbar-link">更多</a>
+        <!--        <div class="navbar-item has-dropdown is-hoverable">-->
+        <!--          <a class="navbar-link">更多</a>-->
 
-          <div class="navbar-dropdown">
-            <a class="navbar-item" @click="userhome">个人主页</a>
-            <!--            <a class="navbar-item">全部板块</a>-->
-            <!--            <a class="navbar-item">全部帖子</a>-->
-            <!--            <hr class="navbar-divider"/>-->
-            <!--            <a class="navbar-item">Report an issue</a>-->
-          </div>
-        </div>
+        <!--          <div class="navbar-dropdown">-->
+        <!--            <a class="navbar-item" @click="userhome">个人主页</a>-->
+        <!--            <a class="navbar-item">全部板块</a>-->
+        <!--            <a class="navbar-item">全部帖子</a>-->
+        <!--            <hr class="navbar-divider"/>-->
+        <!--            <a class="navbar-item">Report an issue</a>-->
+        <!--          </div>-->
+        <!--        </div>-->
         <div class="level-left">
           <div class="level-item">
             <p class="subtitle is-5"></p>
@@ -44,7 +44,7 @@
           <div class="level-item">
             <div class="field has-addons">
               <p class="control">
-                <input class="input" placeholder="Find a post" type="text"/>
+                <input class="input" placeholder="Find a Book" type="text"/>
               </p>
               <p class="control">
                 <button class="button">搜索</button>
@@ -54,47 +54,47 @@
         </div>
       </div>
 
-      <div v-if="!isUActive" class="navbar-end">
-        <div class="navbar-item">
-          <div class="buttons">
-            <b-button outlined type="is-info" @click="register1">注册</b-button>
-            <div class="navbar-menu">
-              <div class="navbar-end">
-                <b-dropdown aria-role="menu" position="is-bottom-left" trap-focus>
-                  <a slot="trigger" class="navbar-item" role="button">
-                    <b-button outlined type="is-info">登录</b-button>
-                  </a>
+      <!--      <div v-if="!isUActive" class="navbar-end">-->
+      <!--        <div class="navbar-item">-->
+      <!--          <div class="buttons">-->
+      <!--            <b-button outlined type="is-info" @click="register1">注册</b-button>-->
+      <!--            <div class="navbar-menu">-->
+      <!--              <div class="navbar-end">-->
+      <!--                <b-dropdown aria-role="menu" position="is-bottom-left" trap-focus>-->
+      <!--                  <a slot="trigger" class="navbar-item" role="button">-->
+      <!--                    <b-button outlined type="is-info">登录</b-button>-->
+      <!--                  </a>-->
 
-                  <b-dropdown-item :focusable="false" aria-role="menu-item" custom paddingless>
-                    <div class="modal-card" style="width:300px;">
-                      <section class="modal-card-body">
-                        <b-field label="Email">
-                          <b-input v-model="email" placeholder="Your email" required type="email"></b-input>
-                        </b-field>
+      <!--                  <b-dropdown-item :focusable="false" aria-role="menu-item" custom paddingless>-->
+      <!--                    <div class="modal-card" style="width:300px;">-->
+      <!--                      <section class="modal-card-body">-->
+      <!--                        <b-field label="Email">-->
+      <!--                          <b-input v-model="email" placeholder="Your email" required type="email"></b-input>-->
+      <!--                        </b-field>-->
 
-                        <b-field label="密码">
-                          <b-input
-                            v-model="password"
-                            password-reveal
-                            placeholder="Your password"
-                            required
-                            type="password"
-                          ></b-input>
-                        </b-field>
+      <!--                        <b-field label="密码">-->
+      <!--                          <b-input-->
+      <!--                            v-model="password"-->
+      <!--                            password-reveal-->
+      <!--                            placeholder="Your password"-->
+      <!--                            required-->
+      <!--                            type="password"-->
+      <!--                          ></b-input>-->
+      <!--                        </b-field>-->
 
-                        <b-checkbox>记住我</b-checkbox>
-                      </section>
-                      <footer class="modal-card-foot">
-                        <button class="button is-primary" @click="login">登录</button>
-                      </footer>
-                    </div>
-                  </b-dropdown-item>
-                </b-dropdown>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <!--                        <b-checkbox>记住我</b-checkbox>-->
+      <!--                      </section>-->
+      <!--                      <footer class="modal-card-foot">-->
+      <!--                        <button class="button is-primary" @click="login">登录</button>-->
+      <!--                      </footer>-->
+      <!--                    </div>-->
+      <!--                  </b-dropdown-item>-->
+      <!--                </b-dropdown>-->
+      <!--              </div>-->
+      <!--            </div>-->
+      <!--          </div>-->
+      <!--        </div>-->
+      <!--      </div>-->
 
       <div v-if="isUActive" class="navbar-end">
         <div class="navbar-item">
@@ -143,7 +143,7 @@
 
 <script>
 
-import {isLogin} from "../api/getData";
+import {isLogin, logout} from "../api/getData";
 
 export default {
   name: "headerMargin",
@@ -155,15 +155,15 @@ export default {
     };
   },
   methods: {
-    userhome() {
-      if (this.$store.state.user.forum_user_id === '')
-        alert('请先登录')
-      else
-        this.$router.push("/userPage");
-    },
+    // userhome() {
+    //   if (this.$store.state.user.forum_user_id === '')
+    //     alert('请先登录')
+    //   else
+    //     this.$router.push("/userPage");
+    // },
     login() {
       const self = this
-      this.axios.get('http://localhost:8080/forum_oneUser_list_email?forum_user_email=' + this.email + '&forum_user_pwd=' + this.password).then(
+      this.axios.get(this.$store.state.host+'forum_oneUser_list_email?forum_user_email=' + this.email + '&forum_user_pwd=' + this.password).then(
         (response) => {
           console.log(this.$store.state.user)
           console.log(response)
@@ -183,7 +183,7 @@ export default {
       )
     },
     register() {
-      this.$router.push("/");
+      this.$router.push("/bookMall");
     },
     register1() {
       this.$router.push("/register");
@@ -192,13 +192,25 @@ export default {
       logout()
       this.$router.push('/login')
       location.reload()
+    },
+    buyList: function () {
+      this.$router.push('/buyList')
+    },
+    saleList: function () {
+      this.$router.push('/sellList')
+    },
+    messageList: function () {
+      this.$router.push('/messageList')
     }
   },
   mounted() {
 
   },
   props: {
-    isUActive: false
+    isUActive: {
+      default: false,
+      type: Boolean
+    }
   }
 };
 </script>

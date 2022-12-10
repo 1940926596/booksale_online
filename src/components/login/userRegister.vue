@@ -2,7 +2,9 @@
   <div class="container">
     <div class="login-wrapper">
       <div class="haveAccount">
-        <div style="justify-self: flex-start;margin-right: 300px;font-size: 25px; background-image: linear-gradient(to right, rgb(0,240,254), rgb(43,43,43));-webkit-background-clip: text;color: transparent;">Register
+        <div
+          style="justify-self: flex-start;margin-right: 300px;font-size: 25px; background-image: linear-gradient(to right, rgb(0,240,254), rgb(43,43,43));-webkit-background-clip: text;color: transparent;">
+          Register
         </div>
         <div class="content1">
           已有账号？
@@ -23,8 +25,15 @@
             <el-form-item label="QQ邮箱" prop="email">
               <el-input v-model="ruleForm.email"/>
             </el-form-item>
+
+            <el-form-item label="所在校区" prop="position">
+              <el-radio v-model="ruleForm.position" label="望江校区">望江</el-radio>
+              <el-radio v-model="ruleForm.position" label="江安校区">江安</el-radio>
+              <el-radio v-model="ruleForm.position" label="华西校区">华西</el-radio>
+            </el-form-item>
+
             <el-form-item label="验证码" prop="code">
-              <el-input v-model="ruleForm.code" maxlength="5"/>
+              <el-input v-model="ruleForm.code" maxlength="6"/>
             </el-form-item>
             <div class="confirm1">
               <el-button round size="mini" @click="sendMsg">发送验证码</el-button>
@@ -65,6 +74,8 @@ export default {
   name: "userRegister",
   data() {
     return {
+      verification: false,
+      code1: '',
       reg1: '',
       reg2: '',
       statusMsg: '',
@@ -79,13 +90,15 @@ export default {
         code: '',
         pwd: '',
         cpwd: '',
-        email: ''
+        email: '',
+        position: '望江校区',
       },
       ifExist: {
-        forum_id: 0,
-        forum_name: '',
-        forum_pwd: '',
-        forum_email: ''
+        id: '',
+        name: '',
+        pwd: '',
+        email: '',
+        position: ''
       },
       rules: {
         agreed: [{
@@ -161,6 +174,9 @@ export default {
       })
       // 模拟验证码发送
       if (!namePass && !emailPass) {
+        this.axios.get(this.$store.state.host + 'sendEmail?emailReceiver=' + this.ruleForm.email).then((res) => {
+          this.code1 = res.data
+        })
         let count = 60
         self.statusMsg = `验证码已发送,剩余${count--}秒`
         self.timerid = setInterval(function () {
@@ -183,25 +199,30 @@ export default {
     },
     exist: function () {
       const self = this
-      this.axios.get('http://localhost:8080/forum_oneUser_list?forum_user_name=' + this.ruleForm.name)
+      this.axios.get(this.$store.state.host + 'sqlOneNameList?user_name=' + this.ruleForm.name)
         .then(function (response) {
           console.log(response.data)
           self.ifExist = response.data
           console.log(self.ifExist)
-          if (self.ifExist.length === 0) {
-            alert("注册成功")
-            self.axios.post('http://localhost:8080/forum_user_add', {
-              "forum_name": self.ruleForm.name,
-              "forum_pwd": self.ruleForm.pwd,
-              "forum_email": self.ruleForm.email
-            })
-            self.$router.push('/')
-          } else {
-            console.log(self.ifExist.email)
-            console.log(self.ifExist.email)
-            console.log(self.ifExist.email)
-            alert("名字已经存在，请换个名字吧")
-          }
+          self.axios.get(self.$store.state.host + 'getCodeList').then((res) => {
+            for (let i = 0; i < res.data.length; i++) {
+              if (self.ruleForm.code === res.data[i].code)
+                self.verification = true
+            }
+            if (self.verification) {
+              if (self.ifExist.length === 0) {
+                alert("注册成功")
+                self.axios.get(self.$store.state.host + 'sqlAdd?name=' + self.ruleForm.name + '&pwd=' + self.ruleForm.pwd + '&position=' + self.ruleForm.position + '&email=' + self.ruleForm.email)
+                self.$router.push('/')
+              } else {
+                console.log(self.ifExist.email)
+                console.log(self.ifExist.email)
+                console.log(self.ifExist.email)
+                alert("名字已经存在，请换个名字吧")
+              }
+            } else
+              alert("验证码错误")
+          })
         })
     },
     login: function () {
@@ -345,7 +366,8 @@ export default {
   top: 50%;
   transform: translate(-50%, -50%);
 }
-.content3{
+
+.content3 {
   background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);
   -webkit-background-clip: text;
   color: transparent;
