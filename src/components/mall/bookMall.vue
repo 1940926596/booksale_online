@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 100%;width: 100%">
     <header-margin :is-u-active=true></header-margin>
     <router-view></router-view>
     <footer-margin></footer-margin>

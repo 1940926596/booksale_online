@@ -18,7 +18,10 @@ export const isLogin = () => {
         store.state.user.user_name = store.state.user.cookie
         store.state.user.isUserActive = true
         axios.get(store.state.host + "sqlOneNameList?user_name=" + store.state.user.user_name).then((response) => {
+          console.log(response.data)
           store.state.user.user_id = response.data[0].id
+          console.log(store.state.user.user_id)
+          console.log(response.data[0].id)
           store.state.user.user_pwd = response.data[0].pwd
           store.state.user.user_email = response.data[0].email
           store.state.user.user_position = response.data[0].position

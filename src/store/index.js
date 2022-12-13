@@ -10,7 +10,7 @@ const store = new Vuex.Store({
     host:"http://localhost:8080/",
     user:{
       test:"lalalala",
-      user_id: '',
+      user_id: 0,
       user_name: '',
       user_pwd: '',
       user_email:'',

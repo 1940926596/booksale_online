@@ -8,6 +8,10 @@ import findPassword from "../components/login/findPassword";
 import buyMessage from "../components/message/buyMessage";
 import saleMessage from "../components/message/saleMessage";
 import message from "../components/message/message";
+import mall from "../components/mall/mall";
+import bookOne from "../components/oneComponent/bookOne";
+import sellOneMessage from "../components/oneComponent/sellOneMessage";
+import buyOneMessage from "../components/oneComponent/buyOneMessage";
 
 Vue.use(Router)
 
@@ -15,8 +19,8 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'home',
-      component: userLogin
+      name: '',
+      component: bookMall
     },
     {
       path: '/login',
@@ -43,8 +47,20 @@ export default new Router({
         },{
           path: '/messageList',
           component: message
-        }
+        },{
+        path: '/mall',
+        component: mall
+      }
       ]
+    }, {
+      path: '/bookOne',
+      component:bookOne
+    }, {
+      path: '/buyOne',
+      component: buyOneMessage
+    }, {
+      path: '/sellOne',
+      component:sellOneMessage
     }
   ]
 })

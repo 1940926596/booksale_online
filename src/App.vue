@@ -17,4 +17,9 @@ body,html{
   width: 100%;
   margin:0;
 }
+
+.el-dialog__title{
+  font:25px Georgia, "Times New Roman", Times, serif;
+}
+
 </style>

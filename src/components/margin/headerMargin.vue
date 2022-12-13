@@ -2,7 +2,7 @@
   <nav aria-label="main navigation" class="navbar is-light" role="navigation">
     <div class="navbar-brand" style="margin-left: 20px">
       <a>
-        <img class="img" src="../../assets/logo.png"/>
+        <img class="img" style="height:50px;width: auto" src="../../assets/logo1.png"/>
       </a>
       <a
         aria-expanded="false"
@@ -17,7 +17,7 @@
       </a>
     </div>
 
-    <div id="navbarBasicExample" class="navbar-menu" style="margin-left: 30px">
+    <div id="navbarBasicExample" class="navbar-menu" style="margin-left: 10px">
       <div class="navbar-start">
         <a class="navbar-item" @click="register">二手书商城</a>
 
@@ -183,7 +183,7 @@ export default {
       )
     },
     register() {
-      this.$router.push("/bookMall");
+      this.$router.push("/mall");
     },
     register1() {
       this.$router.push("/register");

@@ -1,6 +1,6 @@
 <template>
   <div class="footer">
-    Maked by SiChuan University ™
+    Maked by Group2 ™
   </div>
 </template>
 
