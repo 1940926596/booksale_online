@@ -21,5 +21,10 @@ body,html{
 .el-dialog__title{
   font:25px Georgia, "Times New Roman", Times, serif;
 }
-
+.el-input--small .el-input__inner {
+  height: 25px;
+}
+input{
+  font: 15px Georgia, "Times New Roman", Times, serif;
+}
 </style>

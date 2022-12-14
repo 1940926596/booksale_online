@@ -1,6 +1,10 @@
 <template>
   <div class="page">
-    <div class="left"></div>
+    <div class="left">
+      <sell-one-book v-for="(book1,index) in book" :key="index" :book-id="book1.bookId" :book-isbn="book1.isbn"
+                     :book-name="book1.bookName" :book-text="book1.text" :book-type="book1.bookTypes"
+                     :img-src="book1.imageURL" :publish-name="book1.userPublishId"></sell-one-book>
+    </div>
     <div class="right">
       <div class="content1">发布自己不需要的教材</div>
       <el-form ref="form" :model="form" class="form" label-width="80px">
@@ -50,8 +54,11 @@
 </template>
 
 <script>
+import SellOneBook from "../oneComponent/sellOneBook";
+import {isLogin} from "../api/getData";
 export default {
   name: "saleMessage",
+  components: {SellOneBook},
   data() {
     return {
       uploadImg: [],
@@ -61,7 +68,18 @@ export default {
         type: '',
         ISBN: '',
         text: ''
-      }
+      },
+      url: 'logo.png',
+      book: [{
+        bookId: 0,
+        userPublishId: 0,
+        bookName: '',
+        isbn: '',
+        bookTypes: '',
+        imageURL: '',
+        isSold: '',
+        text: ''
+      }],
     };
   },
   computed: {
@@ -145,7 +163,13 @@ export default {
     }
   },
   mounted() {
-
+    this.$emit("changePage",false)
+    isLogin().then((res)=>{
+      this.$emit("changePage",false)
+      this.axios.get(this.$store.state.host+"bookOneUserList?userPublishId="+this.$store.state.user.user_id).then((res)=>{
+        this.book=res.data
+      })
+    })
   }
 }
 </script>
@@ -155,10 +179,16 @@ export default {
   background-color: rgb(245, 245, 245);
   height: 85%;
   display: flex;
+
   justify-content: space-around;
 }
 
 .left {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  overflow: scroll;
+  overflow-x: hidden;
   border: 2px solid pink;
   border-radius: 20px;
   box-shadow: 2px 2px 5px 3px inset rgba(0, 0, 0, 0.2);

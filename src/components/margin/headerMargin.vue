@@ -44,10 +44,10 @@
           <div class="level-item">
             <div class="field has-addons">
               <p class="control">
-                <input class="input" placeholder="Find a Book" type="text"/>
+                <input class="input" placeholder="Find Book by BookName"  v-model="search"  type="text"/>
               </p>
               <p class="control">
-                <button class="button">搜索</button>
+                <button class="button" @click="find">搜索</button>
               </p>
             </div>
           </div>
@@ -151,16 +151,22 @@ export default {
     return {
       email: "",
       password: "",
-      isActive: ''
+      isActive: '',
+      search:'',
+      book_ListRst: [],
+      book: [{
+        bookId: 0,
+        userPublishId: 0,
+        bookName: '',
+        isbn: '',
+        bookTypes: '',
+        imageURL: '',
+        isSold: '',
+        text: ''
+      }],
     };
   },
   methods: {
-    // userhome() {
-    //   if (this.$store.state.user.forum_user_id === '')
-    //     alert('请先登录')
-    //   else
-    //     this.$router.push("/userPage");
-    // },
     login() {
       const self = this
       this.axios.get(this.$store.state.host+'forum_oneUser_list_email?forum_user_email=' + this.email + '&forum_user_pwd=' + this.password).then(
@@ -173,7 +179,7 @@ export default {
             self.$store.commit('setForum_user_name', response.data[0].forum_name)
             self.$store.commit('setForum_user_pwd', response.data[0].forum_pwd)
             self.$store.commit('setForum_user_email', response.data[0].forum_email)
-            self.$router.push('/userPage')
+            self.$router.push('/userbook')
             console.log(this.$store.state.user)
             login(this.$store.state.user.forum_user_email, this.$store.state.user.forum_user_pwd)
             location.reload()
@@ -184,6 +190,7 @@ export default {
     },
     register() {
       this.$router.push("/mall");
+      this.$emit("changePage",false)
     },
     register1() {
       this.$router.push("/register");
@@ -195,16 +202,60 @@ export default {
     },
     buyList: function () {
       this.$router.push('/buyList')
+      this.$emit("changePage",false)
     },
     saleList: function () {
       this.$router.push('/sellList')
+      this.$emit("changePage",false)
     },
     messageList: function () {
       this.$router.push('/messageList')
-    }
+      this.$emit("changePage",false)
+    },
+    find:function (){
+      console.log(1111)
+      const self = this
+      let search = this.search;
+        if (search) {
+          self.axios.get(this.$store.state.host + "allBookList").then((response) => {
+            self.book = response.data
+            console.log(self.book)
+          })
+          this.book_ListRst = []; // 结果列表置空
+          let regStr = '';
+          // 初始化正则表达式
+          for (let i = 0; i < search.length; i++) {
+            regStr = regStr + '(' + search[i] + ')([\\s]*)'; //跨字匹配
+          }
+          console.log(1111)
+          let reg = new RegExp(regStr);
+          console.log(reg);
+          for (let i = 0; i < this.book.length; i++) {
+            let name = this.book[i].bookName; //按照内容匹配
+            let regMatch = name.match(reg);
+            if (null !== regMatch) {// 将匹配的数据放入结果列表中
+              this.book_ListRst.push(this.book[i]);
+            }
+          }
+          console.log(this.book_ListRst)
+          this.$emit('Screen1', this.book_ListRst)
+          this.$router.push('/mall')
+        }
+        else {
+          this.$emit('Screen1', this.book)
+          this.$router.push('/mall')
+        }
+      }
   },
   mounted() {
-
+    this.axios.get(this.$store.state.host + "allBookList").then((res) => {
+      this.book = res.data
+      console.log(this.book[0].isbn)
+      console.log(this.book)
+      console.log(this.book[1].isbn)
+      console.log(this.book[2].isbn)
+      console.log(this.book[0].bookName)
+    })
   },
   props: {
     isUActive: {

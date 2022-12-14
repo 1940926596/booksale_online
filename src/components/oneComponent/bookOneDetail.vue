@@ -2,7 +2,7 @@
   <!--1.首先，弹窗页面中要有el-dialog组件即弹窗组件，我们把弹窗中的内容放在el-dialog组件中-->
   <!--2.设置:visible.sync属性，动态绑定一个布尔值，通过这个属性来控制弹窗是否弹出-->
   <div>
-    <el-dialog :visible.sync="detailVisible" title="图书详情" >
+    <el-dialog :visible.sync="detailVisible" title="图书详情" @close="closeDialog">
       <div class="page">
         <div class="left">
           <img :alt="bookName" :src="require('../../photo/'+imgSrc)" style="height: 100%;width: 100%">
@@ -11,8 +11,7 @@
           <div class="content1">{{ bookId }}</div>
           <div class="content2">{{ bookName }} | {{ bookIsbn }} | {{ bookType }}</div>
           <div class="content3">{{ publishName }} | {{ bookText }}</div>
-          <div class="label1" style="border: 1px solid black;padding: 10px;cursor: pointer" @close="closeDialog">发起报价
-          </div>
+          <div class="label1" style="border: 1px solid black;padding: 10px;cursor: pointer" @click="getDeal">发起报价</div>
         </div>
       </div>
     </el-dialog>
@@ -24,7 +23,8 @@ export default {
   name: "bookOneDetail",
   data() {
     return {
-      detailVisible: false
+      detailVisible: false,
+      time: ''
     }
   },
   methods: {
@@ -37,6 +37,38 @@ export default {
     closeDialog: function () {
       const flag = false;
       this.$emit("changeVisible", flag)
+    },
+    getDeal: function () {
+      if(this.publishUserId===this.$store.state.user.user_id)
+        alert("不能购入自己的图书")
+        return
+      const self = this
+      self.time = new Date().toLocaleTimeString()
+      const date = new Date();
+      const separator = "-";
+      let year = date.getFullYear();
+      let month = date.getMonth() + 1;
+      let strDate = date.getDate();
+      if (month >= 1 && month <= 9) {
+        month = "0" + month;
+      }
+      if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+      }
+      let currentDate = year + separator + month + separator + strDate;
+      const time1 = currentDate + ' ' + self.time
+      this.axios.post(this.$store.state.host + "informationAdd", {
+        "transactionId": 0,
+        "bookId": this.bookId,
+        "sellUserId": this.publishUserId,
+        "buyUserId": this.$store.state.user.user_id,
+        "time": time1
+      }).then((res) => {
+        this.axios.get(this.$store.state.host + "setBookSold?bookId=" + this.bookId).then((res) => {
+          alert("发起成功")
+          location.reload()
+        })
+      })
     }
   },
   props: {
@@ -67,6 +99,10 @@ export default {
     publishName: {
       type: String,
       default: "王小虎"
+    },
+    publishUserId: {
+      type: Number,
+      default: 0
     }
   }
 }
@@ -119,16 +155,19 @@ export default {
   color: black;
 }
 
-.el-dialog__header{
+.el-dialog__header {
   background: #f7f7f7;
   text-align: left;
   font-weight: 600;
 }
 
 {
-  background: #f7f7f7;
-  text-align: left;
-  font-weight: 600;
+  background: #f7f7f7
+;
+  text-align: left
+;
+  font-weight: 600
+;
 }
 
 .content3 {

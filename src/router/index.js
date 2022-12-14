@@ -12,6 +12,7 @@ import mall from "../components/mall/mall";
 import bookOne from "../components/oneComponent/bookOne";
 import sellOneMessage from "../components/oneComponent/sellOneMessage";
 import buyOneMessage from "../components/oneComponent/buyOneMessage";
+import buyOneBook from "../components/oneComponent/buyOneBook";
 
 Vue.use(Router)
 
@@ -61,6 +62,9 @@ export default new Router({
     }, {
       path: '/sellOne',
       component:sellOneMessage
+    },{
+    path:'/buyOneBook',
+      component:buyOneBook
     }
   ]
 })

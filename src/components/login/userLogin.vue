@@ -17,8 +17,8 @@
         <el-button @click="register">Sign up</el-button>
       </div>
       <div class="msg">
-        Forget account?
-        <el-button @click="findPwd">Find password</el-button>
+        Reset account?
+        <el-button @click="findPwd">Reset password</el-button>
       </div>
     </div>
   </div>

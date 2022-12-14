@@ -82,7 +82,10 @@ import BuyOneMessage from "../oneComponent/buyOneMessage";
 import SellOneMessage from "../oneComponent/sellOneMessage";
 export default {
   name: "buyMessage",
-  components: {SellOneMessage, BuyOneMessage}
+  components: {SellOneMessage, BuyOneMessage},
+  mounted() {
+    this.$emit("changePage",false)
+  }
 }
 </script>
 

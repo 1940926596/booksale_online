@@ -27,7 +27,7 @@
       <book-one-detail v-if="visible" ref="dialog" :book-id="book1.bookId" :book-isbn="book1.isbn"
                        :book-name="book1.bookName" :book-text="book1.text" :book-type="book1.bookTypes"
                        :img-src="book1.imageURL"
-                       :publish-name="bookSeller.name" @closeDialog="closeDialog"></book-one-detail>
+                       :publish-name="bookSeller.name" :publish-user-id="bookSeller.id" @closeDialog="closeDialog"></book-one-detail>
 
 <!--      <button @click="handleClick('父组件')">点击</button>-->
 
@@ -78,7 +78,8 @@ export default {
     }
   },
   mounted() {
-    this.axios.get(this.$store.state.host + "allBookList").then((res) => {
+    this.$emit("changePage",false)
+    this.axios.get(this.$store.state.host + "bookNotSoldList").then((res) => {
       this.book = res.data
       console.log(this.book[0].isbn)
       console.log(this.book)
@@ -115,7 +116,16 @@ export default {
         this.book = res.data
       })
     }
-  }
+  },
+  props:{
+    book2:[]
+  },
+  watch:{
+    book2:function (val) {
+      console.log(val);
+      this.book=val
+    }
+  },
 }
 </script>
 
@@ -129,7 +139,7 @@ export default {
 }
 
 .left {
-  border: 2px solid pink;
+  /*border: 2px solid pink;*/
   /*width: 25%;*/
 }
 

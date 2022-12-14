@@ -1,6 +1,10 @@
 <template>
     <div class="page">
-      <div class="left"></div>
+      <div class="left">
+        <buy-one-book v-for="(information1,index) in information" :key='index' :book-id="information1.bookId" :time="information1.time"
+        :buy-user-id="information1.buyUserId" :sell-user-id="information1.sellUserId" :transaction-id="information1.transactionId"></buy-one-book>
+      </div>
+
       <div class="right">
         <div class="container">
           <div class="cube cube--1">
@@ -72,8 +76,34 @@
 </template>
 
 <script>
+import {isLogin} from "../api/getData";
+import BuyOneBook from "../oneComponent/buyOneBook";
+
 export default {
-  name: "buyMessage"
+  name: "buyMessage",
+  components: {BuyOneBook},
+  data(){
+    return{
+      information:[{
+        transactionId:0,
+        bookId:0,
+        sellUserId:0,
+        buyUserId:0,
+        time:'0000-00-00 00:00:00'
+      }]
+    }
+  },
+  mounted() {
+    const self=this
+    this.$emit("changePage",false)
+    isLogin().then(()=>{
+      this.axios.get(this.$store.state.host+'informationOneBuyList?buyUserId='+this.$store.state.user.user_id).then((res)=>{
+        console.log(res.data)
+        this.information=res.data
+        console.log(this.information)
+      })
+    })
+  }
 }
 </script>
 
@@ -86,11 +116,16 @@ export default {
 }
 
 .left {
+  overflow: scroll;
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
   border: 2px solid pink;
   border-radius: 20px;
   box-shadow: 2px 2px 5px 3px inset rgba(0, 0, 0, 0.2);
   background-color: white;
   width: 50%;
+  flex-wrap: wrap;
 }
 
 .right {
@@ -101,11 +136,6 @@ export default {
   /*justify-content: center;*/
   align-items: center;
 }
-
-
-
-
-
 
 
 
