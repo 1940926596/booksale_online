@@ -238,9 +238,6 @@ export default {
         this.exist();
       } else alert("请填写相关信息")
     }
-  },
-  mounted() {
-    isLogin()
   }
 }
 

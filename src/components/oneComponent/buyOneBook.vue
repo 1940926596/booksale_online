@@ -75,8 +75,13 @@ export default {
     deleteDeal: function () {
      this.axios.get(this.$store.state.host+"InformationDelete?transactionId="+this.transactionId).then((res)=>{
        this.axios.get(this.$store.state.host+"setBookNotSold?bookId="+this.book[0].bookId).then(()=>{
-         alert("撤销成功")
-         location.reload()
+         let email1=''
+         this.axios.get(this.$store.state.host+"sqlOneList?user_id="+this.sellUserId).then((res)=>{
+           email1=res.data[0].email
+           this.axios.get(this.$store.state.host + "sendSellerCancelEmail?emailReceiver=" + email1)
+           alert("发起成功")
+           location.reload()
+         })
        })
      })
     }
@@ -102,7 +107,6 @@ export default {
       this.axios.get(this.$store.state.host+"sqlOneList?user_id="+this.sellUserId).then((res)=>{
         this.sellUser=res.data
         console.log(this.sellUser)
-        console.log(this.book[0].bookId)
       })
     })
   }

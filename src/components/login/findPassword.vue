@@ -2,11 +2,13 @@
   <div class="container">
     <div class="login-wrapper">
       <div class="haveAccount">
-        <div style="justify-self: flex-start;margin-right: 360px;font-size: 25px; background-image: linear-gradient(to right, rgb(0,240,254), rgb(43,43,43));-webkit-background-clip: text;color: transparent;">Forget？
+        <div
+          style="justify-self: flex-start;margin-right: 360px;font-size: 25px; background-image: linear-gradient(to right, rgb(0,240,254), rgb(43,43,43));-webkit-background-clip: text;color: transparent;">
+          Forget？
         </div>
-<!--        <div class="content1">-->
-<!--          已有账号？-->
-<!--        </div>-->
+        <!--        <div class="content1">-->
+        <!--          已有账号？-->
+        <!--        </div>-->
         <el-button
           style="height: 60%;display:flex;align-items: center;margin-right: 50px;box-shadow: 2px 2px 5px 3px rgba(0,0,0,0.2);font-size: 18px"
           @click="login">
@@ -66,8 +68,8 @@ export default {
   name: "findPassword",
   data() {
     return {
-      code1:'',
-      verification:false,
+      code1: '',
+      verification: false,
       reg1: '',
       reg2: '',
       statusMsg: '',
@@ -86,10 +88,10 @@ export default {
         position: '望江校区'
       },
       ifExist: {
-        id:'' ,
-        name:'',
-        pwd:'',
-        email:'',
+        id: '',
+        name: '',
+        pwd: '',
+        email: '',
         position: ''
       },
       rules: {
@@ -166,7 +168,7 @@ export default {
       })
       // 模拟验证码发送
       if (!namePass && !emailPass) {
-        this.axios.get(this.$store.state.host+'sendEmail?emailReceiver=' + this.ruleForm.email).then((res) => {
+        this.axios.get(this.$store.state.host + 'sendEmail?emailReceiver=' + this.ruleForm.email).then((res) => {
           this.code1 = res.data
         })
         let count = 60
@@ -191,32 +193,30 @@ export default {
     },
     exist: function () {
       const self = this
-      this.axios.get(this.$store.state.host+'sqlOneNameList?user_name=' + this.ruleForm.name)
+      this.axios.get(this.$store.state.host + 'sqlOneNameList?user_name=' + this.ruleForm.name)
         .then(function (response) {
           console.log(response.data)
           self.ifExist = response.data
           console.log(self.ifExist)
-
-            self.axios.get(self.$store.state.host + 'getCodeList').then((res) => {
-              for (let i = 0; i < res.data.length; i++) {
-                if (self.ruleForm.code === res.data[i].code)
-                  self.verification = true
-                if (self.verification) {
-                  if (self.ifExist.length === 0||self.ifExist[0].email===self.ruleForm.email) {
-                    alert("修改成功")
-                    self.axios.get(self.$store.state.host+'sqlUpdate?name='+self.ruleForm.name+'&pwd='+self.ruleForm.pwd+'&email='+self.ruleForm.email)
-                    self.$router.push('/')
-                  } else {
-                    console.log(self.ifExist.email)
-                    console.log(self.ifExist.email)
-                    console.log(self.ifExist.email)
-                    alert("名字已经存在，请换个名字吧")
-                  }
-                }
-                else
-                  alert("验证码错误")
+          self.axios.get(self.$store.state.host + 'getCodeList').then((res) => {
+            for (let i = 0; i < res.data.length; i++) {
+              if (self.ruleForm.code === res.data[i].code)
+                self.verification = true
+            }
+            if (self.verification) {
+              if (self.ifExist.length === 0 || self.ifExist[0].email === self.ruleForm.email) {
+                alert("修改成功")
+                self.axios.get(self.$store.state.host + 'sqlUpdate?name=' + self.ruleForm.name + '&pwd=' + self.ruleForm.pwd + '&email=' + self.ruleForm.email)
+                self.$router.push('/')
+              } else {
+                console.log(self.ifExist.email)
+                console.log(self.ifExist.email)
+                console.log(self.ifExist.email)
+                alert("名字已经存在，请换个名字吧")
               }
-            })
+            } else
+              alert("验证码错误")
+          })
         })
     },
     login: function () {
@@ -360,7 +360,8 @@ export default {
   top: 50%;
   transform: translate(-50%, -50%);
 }
-.content3{
+
+.content3 {
   background-image: linear-gradient(to right, #fbc2eb, #a6c1ee);
   -webkit-background-clip: text;
   color: transparent;

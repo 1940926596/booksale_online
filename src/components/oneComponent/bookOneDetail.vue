@@ -39,9 +39,10 @@ export default {
       this.$emit("changeVisible", flag)
     },
     getDeal: function () {
-      if(this.publishUserId===this.$store.state.user.user_id)
+      if (this.publishUserId === this.$store.state.user.user_id) {
         alert("不能购入自己的图书")
         return
+      }
       const self = this
       self.time = new Date().toLocaleTimeString()
       const date = new Date();
@@ -65,8 +66,13 @@ export default {
         "time": time1
       }).then((res) => {
         this.axios.get(this.$store.state.host + "setBookSold?bookId=" + this.bookId).then((res) => {
-          alert("发起成功")
-          location.reload()
+          let email1=''
+          this.axios.get(this.$store.state.host+"sqlOneList?user_id="+this.publishUserId).then((res)=>{
+            email1=res.data[0].email
+            this.axios.get(this.$store.state.host + "sendSellerSellEmail?emailReceiver=" + email1)
+            alert("发起成功")
+            location.reload()
+          })
         })
       })
     }

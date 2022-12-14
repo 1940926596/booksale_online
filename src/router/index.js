@@ -21,7 +21,7 @@ export default new Router({
     {
       path: '/',
       name: '',
-      component: bookMall
+      component: userLogin
     },
     {
       path: '/login',

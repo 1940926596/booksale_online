@@ -5,7 +5,7 @@
     <router-view :book2="book2" @changePage="changePage"></router-view>
 <!--    刷新的时候可以不变-->
     <div v-if="isPage"  class="image1">
-      <img class="image2"  src="../../assets/back2.png">
+      <img class="image2"  src="../../assets/back.png">
     </div>
     <!--    父组件向子组件传值-->
     <footer-margin></footer-margin>

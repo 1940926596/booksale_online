@@ -1,11 +1,12 @@
 <template>
   <div class="page">
     <div class="left">
-      <buy-one-message></buy-one-message>
+      <buy-one-message v-for="(information1,index) in informationBuy" :key='index' :book-id="information1.bookId" :time="information1.time"
+                       :buy-user-id="information1.buyUserId" :sell-user-id="information1.sellUserId" :transaction-id="information1.transactionId"></buy-one-message>
       <div style="border-bottom: 1px solid black;width: 100%"></div>
-<!--      <SellOneMessage></SellOneMessage>-->
-      <SellOneMessage></SellOneMessage>
-      <SellOneMessage></SellOneMessage>
+      <!--      <SellOneMessage></SellOneMessage>-->
+      <SellOneMessage v-for="(information1,index) in informationSell" :key='index' :book-id="information1.bookId" :time="information1.time"
+                      :buy-user-id="information1.buyUserId" :sell-user-id="information1.sellUserId" :transaction-id="information1.transactionId"></SellOneMessage>
     </div>
     <div class="right">
       <div class="container">
@@ -80,18 +81,48 @@
 <script>
 import BuyOneMessage from "../oneComponent/buyOneMessage";
 import SellOneMessage from "../oneComponent/sellOneMessage";
+import {isLogin} from "../api/getData";
+
 export default {
   name: "buyMessage",
   components: {SellOneMessage, BuyOneMessage},
   mounted() {
-    this.$emit("changePage",false)
+    this.$emit("changePage", false)
+    isLogin().then((res) => {
+      this.axios.get(this.$store.state.host + "informationOneBuyList?buyUserId=" + this.$store.state.user.user_id).then((res) => {
+        this.informationBuy = res.data
+        console.log(this.informationBuy)
+      })
+      this.axios.get(this.$store.state.host + "informationOneSellList?sellUserId=" + this.$store.state.user.user_id).then((res) => {
+        this.informationSell = res.data
+        console.log(this.informationSell)
+      })
+    })
+  },
+  data() {
+    return {
+      informationBuy: {
+        transactionId: 0,
+        bookId: 0,
+        sellUserId: 0,
+        buyUserId: 0,
+        time: ''
+      },
+      informationSell: {
+        transactionId: 0,
+        bookId: 0,
+        sellUserId: 0,
+        buyUserId: 0,
+        time: ''
+      }
+    }
   }
 }
 </script>
 
 <style scoped>
 .page {
-  background-color: rgb(245,245,245);
+  background-color: rgb(245, 245, 245);
   height: 85%;
   display: flex;
   justify-content: space-around;
@@ -106,7 +137,7 @@ export default {
   background-color: white;
   width: 50%;
   display: flex;
-  /*justify-content: center;*/
+  justify-content: center;
   align-items: center;
   flex-wrap: wrap;
 }
@@ -119,12 +150,6 @@ export default {
   /*justify-content: center;*/
   align-items: center;
 }
-
-
-
-
-
-
 
 
 BODY {
@@ -156,10 +181,12 @@ BODY {
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
 }
+
 .cube--2 {
   -webkit-transform: rotateX(45deg) rotateY(45deg);
   transform: rotateX(45deg) rotateY(45deg);
 }
+
 .cube--3 {
   -webkit-transform: rotateX(45deg) rotateZ(45deg);
   transform: rotateX(45deg) rotateZ(45deg);
@@ -176,6 +203,7 @@ BODY {
   -webkit-transform: rotateY(180deg);
   transform: rotateY(180deg);
 }
+
 .side::before, .side::after {
   content: "";
   display: block;
@@ -190,11 +218,13 @@ BODY {
   border: 1px solid;
   box-shadow: inset 0 0 2em, 0 0 2em;
 }
+
 .side::before {
   width: 2.5em;
   height: 2.5em;
   color: gold;
 }
+
 .side::after {
   width: 1.5em;
   height: 1.5em;
@@ -252,6 +282,7 @@ BODY {
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
 }
+
 .side__inner::before, .side__inner::after {
   content: "";
   display: block;
@@ -266,6 +297,7 @@ BODY {
   border: 1px solid;
   box-shadow: inset 0 0 2em, 0 0 2em;
 }
+
 .side__inner::before {
   width: 2.5em;
   height: 2.5em;
@@ -273,6 +305,7 @@ BODY {
   transform: translateZ(2em);
   color: crimson;
 }
+
 .side__inner::after {
   width: 1.5em;
   height: 1.5em;
@@ -294,6 +327,7 @@ BODY {
     transform: rotateX(360deg) rotateY(720deg) rotateZ(360deg);
   }
 }
+
 HTML, BODY {
   height: 100%;
 }

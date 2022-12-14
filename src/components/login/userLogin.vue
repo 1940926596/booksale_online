@@ -43,6 +43,7 @@ export default {
       const self = this
       this.axios.get(self.$store.state.host+'sqlOneNamePwdList?user_name=' + this.username + '&user_pwd=' + this.userpwd).then(
         (response) => {
+          if (response.data.length) {
           self.$store.commit('setForum_user_id', response.data[0].id)
           self.$store.commit('setForum_user_name', response.data[0].name)
           self.$store.commit('setForum_user_pwd', response.data[0].pwd)
@@ -50,16 +51,16 @@ export default {
           self.$store.commit('setForum_user_position', response.data[0].position)
           console.log(this.$store.state.user)
           console.log(response)
-          if (response.data.length) {
             alert("登录成功")
             self.$router.push('/bookMall')
             console.log(this.$store.state.user)
             login(this.$store.state.user.user_name, this.$store.state.user.user_pwd)
             location.reload()
-          } else
+          }
+          else {
             alert("查无此人")
-        }
-      )
+          }
+        })
     },
     findPwd:function (){
       this.$router.push('/findPwd')

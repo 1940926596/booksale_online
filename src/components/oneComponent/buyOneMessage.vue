@@ -1,19 +1,18 @@
 <template>
   <div class="page"
-       style="background-color:white; width: 700px;height: 170px;border: 1px solid rgb(100,100,100);display: flex;align-items: center;justify-content: space-around;margin: 10px">
+       style="background-color:white;  width: 600px;height: 160px;border: 1px solid rgb(100,100,100);display: flex;align-items: center;justify-content: space-around;margin: 10px">
     <div class="left">
-      <img :alt="bookName" :src="require('../../assets/'+imgSrc)" style="height: 100%;width: 100%">
+      <img :alt="book[0].bookName" :src="require('../../photo/'+book[0].imageURL)" style="height: 100%;width: 100%">
     </div>
     <div class="middle">
-      <div class="content1">发起报价 | 交易号: {{ dealId }}</div>
-      <div class="content2">图书名: {{ bookName }}</div>
-      <div class="content3">ISBN: {{ bookISBN }}</div>
-      <div class="content4">报价时间: {{ dealTime }}</div>
-      <div class="content4">书拥有者: {{ buyUser }}</div>
+      <div class="content1">发起报价 | 交易号: {{ transactionId }}</div>
+      <div class="content2">图书信息 | {{ book[0].bookId }} | {{ book[0].bookName }} | {{ book[0].bookTypes }}</div>
+      <div class="content3">书拥有者信息 | {{ sellUser[0].name }} | {{ sellUser[0].email }} | {{ sellUser[0].position }}</div>
+      <div class="content4">报价时间: {{ time }}</div>
     </div>
     <div class="right">
-      <div class="label1" style="border: 1px solid black;padding: 10px;cursor: pointer">撤销交易</div>
-      <!--      <div class="label1" style="border: 1px solid black;padding: 2px 20px;cursor: pointer;color: white;background-color: rgb(100,100,100);">发起报价</div>-->
+      <div class="label1" style="border: 1px solid black;padding: 10px;cursor: pointer" @click="cancel">撤销交易</div>
+      <!--<div class="label1" style="border: 1px solid black;padding: 2px 20px;cursor: pointer;color: white;background-color: rgb(100,100,100);">发起报价</div>-->
     </div>
   </div>
 </template>
@@ -22,32 +21,91 @@
 export default {
   name: "buyOneMessage",
   data() {
-    return {}
+    return {
+      book: {
+        bookId: 0,
+        userPublishId: 0,
+        bookName: '',
+        isbn: '',
+        bookTypes: '',
+        imageURL: '',
+        isSold: '',
+        text: ''
+      },
+      sellUser: [{
+        id: '',
+        name: '',
+        pwd: '',
+        email: '',
+        position: ''
+      }],
+      buyUser: [{
+        id: '',
+        name: '',
+        pwd: '',
+        email: '',
+        position: ''
+      }]
+    }
   },
   props: {
-    imgSrc: {
-      type: String,
-      default: "logo.png"
+    transactionId: {
+      type: Number,
+      default: 0
     },
-    dealId: {
-      default: 1,
-      type: Number
+    bookId: {
+      type: Number,
+      default: 0
     },
-    bookName: {
-      default: "西厢记",
-      type: String
+    sellUserId: {
+      type: Number,
+      default: 0
     },
-    bookISBN: {
-      type: String,
-      default: "11111-11111-1111"
+    buyUserId: {
+      type: Number,
+      default: 0
     },
-    dealTime: {
+    time: {
       type: String,
       default: "0-0-0-0"
-    },
-    buyUser: {
-      type: String,
-      default: "陈小刚"
+    }
+  },
+  watch: {
+    transactionId: function (val) {
+      const self = this
+      this.axios.get(this.$store.state.host + "bookOneList?bookId=" + this.bookId).then((res) => {
+        this.book = res.data
+        console.log(this.book)
+        this.axios.get(this.$store.state.host + "sqlOneList?user_id=" + this.sellUserId).then((res) => {
+          this.sellUser = res.data
+          console.log(this.sellUser)
+        })
+      })
+    }
+  },
+  mounted() {
+    this.axios.get(this.$store.state.host + "bookOneList?bookId=" + this.bookId).then((res) => {
+      this.book = res.data
+      console.log(this.book)
+      this.axios.get(this.$store.state.host + "sqlOneList?user_id=" + this.sellUserId).then((res) => {
+        this.sellUser = res.data
+        console.log(this.sellUser)
+      })
+    })
+  },
+  methods:{
+    cancel:function (){
+      this.axios.get(this.$store.state.host+"InformationDelete?transactionId="+this.transactionId).then((res)=>{
+        this.axios.get(this.$store.state.host+"setBookNotSold?bookId="+this.book[0].bookId).then(()=>{
+          let email1=''
+          this.axios.get(this.$store.state.host+"sqlOneList?user_id="+this.sellUserId).then((res)=>{
+            email1=res.data[0].email
+            this.axios.get(this.$store.state.host + "sendSellerCancelEmail?emailReceiver=" + email1)
+            alert("发起成功")
+            location.reload()
+          })
+        })
+      })
     }
   }
 }
@@ -78,7 +136,7 @@ export default {
 }
 
 .content1 {
-  font: 22px Georgia, "Times New Roman", Times, serif;
+  font: 17px Georgia, "Times New Roman", Times, serif;
   color: greenyellow;
 }
 

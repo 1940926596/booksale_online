@@ -173,7 +173,7 @@ export default {
 }
 
 .content1 {
-  font: 22px Georgia, "Times New Roman", Times, serif;
+  font: 17px Georgia, "Times New Roman", Times, serif;
 
 }
 

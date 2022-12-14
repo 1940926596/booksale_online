@@ -2,7 +2,7 @@
   <nav aria-label="main navigation" class="navbar is-light" role="navigation">
     <div class="navbar-brand" style="margin-left: 20px">
       <a>
-        <img class="img" style="height:50px;width: auto" src="../../assets/logo1.png"/>
+        <img class="img" style="height:50px;width: auto" src="../../assets/logo1.png" @click="main"/>
       </a>
       <a
         aria-expanded="false"
@@ -187,6 +187,10 @@ export default {
             alert("查无此人")
         }
       )
+    },
+    main(){
+      this.$router.push("/bookMall");
+      location.reload()
     },
     register() {
       this.$router.push("/mall");
