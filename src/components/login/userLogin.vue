@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import {login} from "../api/getData";
+import {login, logout} from "../api/getData";
 
 export default {
   name: "userLogin",
@@ -65,6 +65,9 @@ export default {
     findPwd:function (){
       this.$router.push('/findPwd')
     }
+  },
+  mounted() {
+    logout()
   }
 }
 </script>
